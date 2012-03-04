@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/swing-worker-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/dev"/>
+	<classpathentry kind="lib" path="lib/swingx-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/clojure-1.2.0.jar" sourcepath="/home/aschoerk/projects/sudoku/clojure-1.2.0-src.jar"/>
+	<classpathentry kind="lib" path="lib/forms-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/seesaw-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/filters-2.0.235.jar"/>
+	<classpathentry kind="lib" path="lib/miglayout-3.7.4.jar"/>
+	<classpathentry kind="lib" path="lib/j18n-1.0.0.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

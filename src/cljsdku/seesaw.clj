@@ -113,7 +113,7 @@
 
 (defn make-mig []
   (let [dim 3
-        text-array (make-grid2 dim (cljsdku.test-data/examples-3d 0))
+        text-array (make-grid2 dim (nth cljsdku.test-data/examples-3d 0))
         panel-array (fill-separators dim text-array)
         text-field (text "0")
         time-field (text "10")
@@ -166,7 +166,7 @@
                        (if (= 1 cr) (str "\nway:" (res :ways)) "")))))))
         fill-panel-array-by-example 
           (fn [index]
-            (let [sudokuArray (cljsdku.test-data/examples-3d index)]
+            (let [sudokuArray (nth cljsdku.test-data/examples-3d index)]
               (fill-panel-array sudokuArray)))
         nextprev-puzzle (fn [nextprev] 
                  (let [index (nextprev (get-index))]
@@ -287,5 +287,6 @@
   ; Avoid RejectedExecutionException in lein :(
   @(promise))
 
+(def dummy "aaa")
 
 (-main)

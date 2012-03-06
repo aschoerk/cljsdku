@@ -13,9 +13,12 @@ What has been created is a small and ugly program usable to:
 * Create new sudokus as complex as possible in a given time using a given number of threads (aka processors)
 ## Outline
 If your are able to start the program, how this might become possible will be described later, you might see something like the following picture. As anybody might notice quite fast, the Userinterface has not been designed very thoroughly but developed with upcoming needs to implement a few usecases.
+
 ![Example of the User-interface](https://github.com/aschoerk/cljsdku/raw/master/doc/images/ExampleGui.png)
+
 ### General GUI Structure 
 The userinterface  is structured into the following three areas 
+
 ![raw outline](https://github.com/aschoerk/cljsdku/raw/master/doc/images/RawOutlineOfUserInterface.png)
 
 * **Sudoku Grid:** contains 81 editable fields where the current puzzle is shown and can be changed. 
@@ -38,7 +41,7 @@ The result of  this mapping is:
 [1 4 5 2 6 7 3 9 8 6 8 7 3 1 9 2 4 5 3 2 9 4 5 8 1 6 7 5 7 4 6 1 9 8 2 3 1 2 3 4 5 8 7 9 6 8 9 6 2 7 3 5 1 4 4 5 6 7 8 1 9 3 2 9 3 2 5 6 4 8 7 1 7 8 1 9 3 2 6 4 5]
 
 ![Z-Order Mapping of Grid to internal vector](https://github.com/aschoerk/cljsdku/raw/master/doc/images/ZOrder-Mapping.png)
-![Orignal Grid](https://github.com/aschoerk/cljsdku/raw/master/doc/images/OrgGrid.png)
+  ![Orignal Grid](https://github.com/aschoerk/cljsdku/raw/master/doc/images/OrgGrid.png)
 
 ## The Controlling Area
 ### Scrolling through the examples

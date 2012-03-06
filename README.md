@@ -92,7 +92,7 @@ The sudoku-board is internally represented by a clojure vector mapped in Z-Order
 Given a sudoku-board with empty places, derived from the already filled out neighbours of the block, row and column where an empty place is located, a list is generated containing the information which values might be inserted.
 An example:
 
-     ((46 [9]) (22 [2 9]) (49 [6 9]) (51 [3 6]) (53 [3 5]) (68 [1 3]) (69 [1 4]) (77 [1 8]) (78 [1 9]) (7 [1 3 8]) (8 [1 8 9]))
+    ((46 [9]) (22 [2 9]) (49 [6 9]) (51 [3 6]) (53 [3 5]) (68 [1 3]) (69 [1 4]) (77 [1 8]) (78 [1 9]) (7 [1 3 8]) (8 [1 8 9]))
 
 means:
 
@@ -101,7 +101,7 @@ means:
 In the GUI-Output, this list looks as following:
 
     ((8/4(46) [9]) (8/2(22) [2 9]) (8/5(49) [6 9]) (7/6(51) [3 6]) (9/6(53) [3 5]) (6/8(68) [1 3]) (4/9(69) [1 4]) (9/8(77) [1 8]) (7/9(78) [1 9]) (2/3(7) [1 3 8]) (3/3(8) [1 8 9])
-
+
 The list is sorted so, that the sub-list containing the shortest value arrays are at the beginning. Single value entries are handled in a special way since they unconditionally define that an entry may be set without necessary recursion.
 
 ### The “Ways List”

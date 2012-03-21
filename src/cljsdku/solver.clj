@@ -79,7 +79,8 @@
                      ))))))))))
       
         
-(println test-2dim-array2 (create-pbls 2 test-2dim-array2))
+(println "test-2dim-array2" test-2dim-array2 (create-pbls 2 test-2dim-array2))
+
 (insert-pos 
   (create-pbls 2 test-2dim-array2) test-2dim-array2 2 15 2)
 
@@ -219,7 +220,7 @@
                         )))))))))))))
 (def iterate-pbls-2)
 
-(def *maxresults* 50)
+(def ^:dynamic *maxresults* 50)
 
 (defn iterate-pbls-1 [dim pbls array res level way]
   (if (< *maxresults* (count (res :results)))

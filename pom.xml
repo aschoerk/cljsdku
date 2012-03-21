@@ -6,7 +6,13 @@
   <artifactId>cljsdku</artifactId>
   <version>1.0.1-SNAPSHOT</version>
   <name>cljsdku</name>
-  <description>Yet another sudoku in clojure</description>
+  <description>Sudoku in clojure, in the beginning just small project used for learning functional and parallel programming, now an ugly user-interface but capable to create really fiendish sudoku-puzzles, if you invest enough time and processors.</description>
+  <scm>
+    <connection>scm:git:git://github.com/aschoerk/cljsdku.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/aschoerk/cljsdku.git</developerConnection>
+    <tag>982f070b80deaeffb216ab57f4ce3737a96a684c</tag>
+    <url>https://github.com/aschoerk/cljsdku</url>
+  </scm>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
@@ -33,12 +39,6 @@
   </repositories>
   <dependencies>
     <dependency>
-      <groupId>org.clojure</groupId>
-      <artifactId>clojure-contrib</artifactId>
-      <version>1.2.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>lein-eclipse</groupId>
       <artifactId>lein-eclipse</artifactId>
       <version>1.0.0</version>
@@ -47,7 +47,7 @@
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
     <dependency>
       <groupId>seesaw</groupId>

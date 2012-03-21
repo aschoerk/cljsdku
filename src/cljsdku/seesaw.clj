@@ -4,7 +4,8 @@
         [clojure.string :as string]
         [cljsdku.solver] [cljsdku.tools] [cljsdku.pbls] [cljsdku.generator]
         [cljsdku.test-data])
-  (:use [seesaw core border table mig scroll]))
+  (:use [seesaw core border table mig scroll])
+  (:gen-class))
 
 (comment " 
 (def active-requests (atom #{}))
@@ -287,6 +288,5 @@
   ; Avoid RejectedExecutionException in lein :(
   @(promise))
 
-(def dummy "aaa")
 
-(-main)
+(defn callmain [] (-main))

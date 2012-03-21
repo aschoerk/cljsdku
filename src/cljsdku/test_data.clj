@@ -27,6 +27,6 @@
     #(vec (map (fn [s] (. Integer parseInt s)) (re-seq (re-pattern "[0-9]+") %)))
     (vec (read-examples))))
 
-(println (count examples-3d) (nth examples-3d 2))
+;(println "examples-3d" (count examples-3d) (nth examples-3d 2))
                        
 ; (def examples-3d (into (into (into examples-3d-1 examples-3d-2) examples-3d-3) examples-3d-4))

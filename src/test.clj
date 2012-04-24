@@ -25,46 +25,60 @@
     (java.util.Collections/shuffle al random)
     (clojure.lang.RT/vector (.toArray al))))
 
-(defn improve2 [array initiallevel]
-  (println "improve2" array)
+(defn improve2 [array initiallevel initialtested]
+  ; (println "improve2" array)
   (let [dim (dim-by-array array)
         places (vec (myshuffle (remove #(= (last %1) 0) (map-indexed #(list %1 %2) array))))         
         ]   
     ;(println "improve by clear" array)
     ;(println "in places: " places)
-    (loop [index 0 a array level initiallevel]
+    (loop [index 0 a array level initiallevel tested initialtested]
       (if (>= index (count places))
-        (if (> level initiallevel) (list a level) nil)
+        (if (> level initiallevel) (list a level tested) (list nil nil tested))
 	      (let [pair (places index) 
 	            testarray (assoc a (first pair) 0)
-	            res (single-solution-by-poss dim testarray)
-              newlevel (eval-way (res :ways))]
-	        (if (and (= 1 (count (res :results))) (<= level newlevel)) ; (res :maxlevel) (res :level))))
-             (do 
-               ; (println  "way" (res :ways))
-               ; (println (thread-name) "in level" level "->" (res :level) "improved to " testarray  )
-               ; (when (> newlevel 50) (insert-or-update-puzzle-2 (res :result) testarray newlevel))
-	             (recur (inc index) testarray newlevel)) ; (* (res :maxlevel) (res :level))))
-	           (recur (inc index) a level)))))))
+              restested (conj tested testarray)]
+           (if (not (contains? tested testarray))             
+	           (let [res (single-solution-by-poss dim testarray)
+	                 newlevel (eval-way (res :ways))]
+				        (if (and (= 1 (count (res :results))) (<= level newlevel)) ; (res :maxlevel) (res :level))))
+			             (do 
+			               ; (println  "way" (res :ways))
+			               ; (println (thread-name) "in level" level "->" (res :level) "improved to " testarray  )
+			               ; (when (> newlevel 50) (insert-or-update-puzzle-2 (res :result) testarray newlevel))
+			               (if (> newlevel initiallevel)
+			                 (println "better at level: " newlevel testarray))
+				             (recur (inc index) testarray newlevel restested)) ; (* (res :maxlevel) (res :level))))
+				           (recur (inc index) a level restested)))
+             (recur (inc index) a level restested)))))))
+
+(defn reduceimprove [i1 i2 callres]
+  (println "reduceimprove: " (count (last callres)))
+  (let [restested (union (last i1) (last callres))]
+    (if (not= nil (first callres))
+        (list (conj (first i1) (first callres)) (conj (fnext i1) (fnext callres)) restested)
+        (list (first i1) (fnext i1) restested))))
 
 (defn improve-by-solution [array solution initiallevel]
   (let [dim (dim-by-array array)
-        filledplaces (vec (myshuffle (remove #(not= (last %1) 0) (map-indexed #(list %1 %2) array))))         
+        filledplaces (vec (myshuffle (remove #(not= (last %1) 0) (map-indexed #(list %1 %2) array))))
         ]   
     ;(println "improve by clear" array)
     ;(println "in places: " places)
-    (loop [index 0 a array level initiallevel]
-      (println "loop" index "level" level)
+    (loop [index 0 a array level initiallevel tested #{}]
+      ; (println "loop" index "level" level)
       (if (>= index (count filledplaces))
         (list a level)
 	      (let [pair (filledplaces index) 
 	            testarray (assoc array (first pair) (solution (first pair)))
-              results (filter #(not= nil %) (map #(do (println %) (improve2 testarray level)) (take 20 (iterate inc 0))))  
+              results (reduce #(reduceimprove %1 %2 (improve2 testarray level (last %1))) 
+                                                    (list nil nil tested) (take 20 (iterate inc 0)))
+              rescount (count (first results))
 	            ]          
-           (println "results: " (count results))
-           (if (> (count results) 0)
-	       	   (recur (inc index) testarray level)
-             (recur (inc index) a level))
+           (if (> rescount 0) (println "results: " results))
+           (if (> rescount 0)
+	       	   (recur (inc index) testarray level (last results))
+             (recur (inc index) a level (last results)))
       )))
     (println "after loop")
     ))

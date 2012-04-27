@@ -19,7 +19,10 @@
 (defn create-pbls 
   "gets all possible values for each empty (0) places and add these together with the position in the resultarray.
    the resultarray is sorted so the position with the shortest arrays, the least possibilities are at the beginning."
-  [dim sudokuArray]
+  ([sudokuArray]
+    (let [dim (dim-by-array sudokuArray)]
+      (create-pbls dim sudokuArray)))
+  ([dim sudokuArray]
   ;(println "pos-check")
   (loop [a 0 e (* dim dim dim dim) res [] foundNotEmpty false]
     ;(println "pos-check: " a)
@@ -35,8 +38,51 @@
 		        (if (empty? res1)
 		          (do ;(println "not solution found") 
               nil)
-		        (recur (inc a) e (conj res res1) true))))))))
+		        (recur (inc a) e (conj res res1) true)))))))))
 
+
+(defn pbls-2-poss-mx
+  [dim pbls]
+  ;(println "pbls: " pbls)
+  (let [valnum (* dim dim)
+        mx (vec (repeatedly valnum #(vec (repeat (* valnum valnum) false))))
+        reducer (fn [mx entry]
+          (let [ix (first entry)
+                values (last entry)]
+            (reduce #(assoc %1 (dec %2) (assoc (%1 (dec %2)) ix true)) mx values)))
+        ]
+      (reduce reducer mx pbls)
+    ))
+
+
+
+
+(defn mx-hidden-single-dim [indexarrays result vals]
+  ;(println vals)
+  (let  [checkindexarray 
+           (fn [result indexarray]
+             ;(println indexarray)
+					   (if (= 1 (reduce #(if (vals %2) (inc %1) %1) 0 indexarray))
+               (do 
+               ;(println "found hidden single")
+					     (conj result (reduce #(if (vals %2) %2 %1) 0 indexarray)))              
+               result))]
+    (reduce checkindexarray result indexarrays)))
+
+
+(defn mx-hidden-singles-per-val
+  [dim vals result]
+  (let [valnum (* dim dim)
+    result1 (mx-hidden-single-dim (row-indexes_c dim) result vals)
+    result2 (mx-hidden-single-dim (col-indexes_c dim)  result1 vals)
+    result3 (mx-hidden-single-dim (block-indexes_c dim)  result2 vals)]
+    result3))
+
+(defn mx-hidden-singles
+  [mx]
+  (let [dim (dim-by-array (mx 0))
+        result #{}]
+    (reduce #(mx-hidden-singles-per-val dim %2 %1) result mx)))
 
 
 (defn pbls-complexity 

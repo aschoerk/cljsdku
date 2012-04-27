@@ -85,14 +85,20 @@
 (def indexes (init-indexes 4))  
 
 
-(defn col-indexes_c [dim col]
-  (((indexes (- dim 2)) 1) col))
+(defn col-indexes_c 
+  ([dim] ((indexes (- dim 2)) 1))
+  ([dim col]
+  (((indexes (- dim 2)) 1) col)))
 
-(defn block-indexes_c [dim block]
-  (((indexes (- dim 2)) 2) block))
+(defn block-indexes_c 
+  ([dim] ((indexes (- dim 2)) 2))
+  ([dim block]
+  (((indexes (- dim 2)) 2) block)))
 
-(defn row-indexes_c [dim row]
-  (((indexes (- dim 2)) 0) row))
+(defn row-indexes_c 
+  ([dim] ((indexes (- dim 2)) 0))
+  ([dim row]
+  (((indexes (- dim 2)) 0) row)))
 
 (defn coord-2-index [dim col row]
   ((col-indexes_c dim col) row))

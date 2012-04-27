@@ -161,5 +161,30 @@
   (is (check-sudoku-allow-zero test-2dim-array3))
   (is (check-sudoku-allow-zero [1 2 4 3 3 4 1 2 2 1 3 4 4 3 2 1]))
   (is (not (check-sudoku-allow-zero [1 2 4 3 3 4 1 2 2 1 3 4 3 4 2 1]))))
-   
-; (run-tests  )  
+
+(deftest mx-test2
+  (let  [pbls (create-pbls 2 test-2dim-array2)
+         mx (pbls-2-poss-mx 2 pbls)]
+    (is ((mx 1) 14))
+    (is ((mx 0) 15))
+    (is ((mx 2) 4))
+    (is ((mx 3) 4))
+    (is ((mx 2) 5))
+    (is ((mx 3) 5))
+    (is ((mx 2) 12))
+    (is ((mx 3) 12))
+    (is ((mx 2) 13))
+    (is ((mx 3) 13))
+    ))
+
+(deftest hidden-singles-test
+  (is (= #{12 13 14 15} (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array4)))))
+  (is (= #{14 15} (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array2)))))
+  (is (= #{14 15} (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array3)))))
+  (is (= #{12 13 14 15} (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array)))))
+  )    
+    
+    
+
+
+(run-tests  )  

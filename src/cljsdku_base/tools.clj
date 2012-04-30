@@ -56,7 +56,17 @@
 
 
 (defn dim-by-array [array]
-  (int (Math/sqrt (Math/sqrt (count array)))))
+  ;(println "array: " array)
+  ;(println "size: " (count array))
+  
+  (let [size (count array)]
+    (cond 
+      (= 81 size) 3
+      (= 16 size) 2
+      (= 256 size) 4
+      (= 625 size) 5
+      :else
+        (int (Math/sqrt (Math/sqrt (size)))))))
 
 (defn init-indexes 
   "creates a 3-dim-array, 
@@ -142,6 +152,22 @@
 
 ;(check-area 3 (row-indexes 3 (index-2-row 3 0)) 1 testsudoku)
 
+(defn single-pos-check-1
+  "find out which values can be inserted at currentIndex in sudokuArray without directly invalidating the puzzle
+   returns an an array containing all the at this position obviously valid values, value of sudokuArray at position 
+   currentIndex must be zero."
+  [dim currentIndex sudokuArray]
+  (if (not= 0 (sudokuArray currentIndex))
+    []    
+  (let [rowI (row-indexes_c dim (index-2-row dim currentIndex))
+        colI (col-indexes_c dim (index-2-col dim currentIndex))
+        blockI (block-indexes_c dim (index-2-block dim currentIndex))
+        e (* dim dim)]
+        (reduce #(if (and (check-area dim rowI %2 sudokuArray) 
+                          (check-area dim colI %2 sudokuArray)
+                          (check-area dim blockI %2 sudokuArray)) (conj %1 %2) %1) [] (range 1 (inc e))))))
+  
+
 (defn single-pos-check 
   "find out which values can be inserted at currentIndex in sudokuArray without directly invalidating the puzzle
    returns an array containing two values: the currentIndex and an array containing all the at this position obviously valid values, 
@@ -170,17 +196,31 @@
 (defn eval-way [way] 
   ;(println way)
   ;(println (last (first (first (first way)))))
-  (let [waylist (way 0)
-        posslist (map #(let [c (count (last (first %)))] (* c c)) waylist)
-        ]
-    ;(println posslist)
-    (reduce + posslist)))
+	(if (and (vector? way) (> (count way) 0))
+	  (let [waylist (way 0)
+	        posslist (map #(let [c (count (last (first %)))] (* c c)) waylist)
+	        ]
+	    ;(println posslist)
+	    (reduce + posslist))
+	   0
+	   ))
+      
 
 (eval-way '[(((66 [6 8]) 0))])
 (eval-way '[(((66 [6 8]) 0) ((52 [1 4 6]) 0) ((32 [5 9]) 0) ((30 [1 6 9]) 1) ((24 [1 4]) 1) ((16 [1 5]) 1) ((11 [4 5]) 0) 
             ((0 [2 9]) 0) ((68 [1 3]) 0) ((55 [1 2]) 1) ((38 [1 2]) 1) ((21 [2 7]) 1) ((7 [5 7]) 1) ((6 [7 8]) 1))])
 
+(defn transl-to-linear [array]
+  (let [dim (dim-by-array array)
+        res (vec (repeat (* dim dim dim dim) 0))
+        rowlen (* dim dim)]
+    (reduce #(assoc %1 (+ (* rowlen (index-2-row dim %2)) (index-2-col dim %2)) (array %2) ) res (range 0 (count res)))))
 
+(defn transl-from-linear [array]
+  (let [dim (dim-by-array array)
+        res (vec (repeat (* dim dim dim dim) 0))
+        rowlen (* dim dim)]
+    (reduce #(assoc %1 (coord-2-index dim (mod %2 rowlen) (quot %2 rowlen)) (array %2)) res (range 0 (count res)))))
 
 
 

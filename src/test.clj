@@ -44,7 +44,9 @@
 				        (if (and (= 1 (count (res :results))) (<= level newlevel)) ; (res :maxlevel) (res :level))))
 			             (do 
 			               (if (> newlevel level)
-			                 (println "better at level: " newlevel testarray))
+                       (do 
+			                   (println "better at level: " newlevel testarray)
+                         (println "linear" (transl-to-linear testarray))))
 				             (improve2 testarray newlevel restested)) ; (* (res :maxlevel) (res :level))))
 				           (recur (inc index) a level restested)))
              (recur (inc index) a level restested))
@@ -66,14 +68,16 @@
         initiallevel (eval-way (sol :ways))
         filledplaces (vec (myshuffle (remove #(not= (last %1) 0) (map-indexed #(list %1 %2) array))))
         ]   
-    (println "         initial level" initiallevel)
+    ;(println "         initial level" initiallevel)
+    ;(println "         solution" solution)
     (loop [index 0 a array level initiallevel tested initialtested]
+      ;(println "filled places" filledplaces)
       (if (> index (- (count filledplaces) chgnum))
         (list a level tested)
 	      (let [ 
               indices (range index (+ index chgnum))
               testarray (reduce #(let [pair (filledplaces %2)] 
-                                   ;(println "pair" (first pair) (solution (first pair))) 
+                                   ;(println "pair" pair) ; (first pair) (solution (first pair))) 
                                    (assoc %1 (first pair) (solution (first pair)))) 
                                 array indices) 
 	            results (reduce #(reduceimprove %1 %2 (improve2 testarray level (last %1))) 
@@ -93,6 +97,7 @@
     (loop [res (list array 0 #{})]
       (if (> (. System currentTimeMillis) end-time)
         (first res)
+
         (let [chgnum (inc (rand-int 20))
               improve2runs (inc (rand-int 100))]
 	        (println (java.util.Date.) "chgnum" chgnum "improve2runs" improve2runs)
@@ -118,21 +123,11 @@
 ; 91))
 
 (println (cycle-improve 10000
-[0 0 0 0 0 3 0 0 0 0 0 7 0 2 1 0 0 9 5 0 8 0 0 0 0 0 0 0 0 0 1 0 0 8 2 0 0 0 0 6 0 0 7 0 0 0 0 9 8 0 0 0 3 0 2 8 0 7 0 4 3 0 0 0 0 0 1 3 0 0 0 8 0 0 0 0 0 2 0 6 0]
+;[0 0 0 0 0 3 0 0 0 0 0 7 0 2 1 0 0 9 5 0 8 0 0 0 0 0 0 0 0 0 1 0 0 8 2 0 0 0 0 6 0 0 7 0 4 0 0 9 8 0 0 0 3 0 2 8 0 7 0 4 3 0 0 0 0 0 1 3 0 0 0 8 0 0 0 0 0 0 0 6 0]
+;[0 0 0 0 0 3 0 0 0 0 0 7 0 2 1 0 0 9 5 0 8 0 0 0 0 0 0 0 0 0 1 0 0 8 2 0 0 0 0 6 0 0 7 0 0 0 0 9 8 0 0 0 3 0 2 8 0 7 0 4 3 0 0 0 0 0 1 3 0 0 0 8 0 0 0 0 0 2 0 6 0]
 ;[0 0 0 0 0 3 0 0 0 0 0 0 0 0 1 0 5 9 5 0 8 0 0 0 0 0 0 0 0 0 1 0 0 8 2 0 0 0 0 6 0 0 7 0 4 0 0 9 8 0 0 0 3 0 2 8 0 7 0 0 3 0 5 0 0 0 0 3 0 2 0 8 0 0 0 0 0 2 0 0 0]
-;[0 0 0 0 0 0 8 0 9 0 5 0 0 8 0 3 0 0 7 0 0 0 2 0 0 0 0 0 0 3 0 4 0 0 9 0 0 0 0 6 0 0 0 0 3 0 0 0 0 3 0 5 0 4 7 0 0 0 0 0 0 2 0 0 0 1 2 0 4 0 0 5 0 6 2 9 0 8 0 0 0]                        
-;[0 0 0 0 0 0 8 0 9 0 5 0 0 0 9 3 0 0 7 0 0 0 2 0 0 0 0 0 0 3 0 4 0 0 9 0 0 0 0 6 0 0 0 0 0 0 0 0 0 3 0 5 0 4 7 0 0 0 0 0 0 2 0 0 0 1 2 0 4 0 0 5 0 6 2 9 0 8 0 0 0]
-;[0 0 0 0 0 0 8 0 9 0 5 0 0 0 9 3 0 0 7 0 0 0 0 0 6 0 0 0 0 3 0 4 0 0 9 0 0 0 0 6 0 0 0 0 0 0 0 0 0 3 0 5 0 4 7 0 0 0 0 0 0 2 0 9 0 1 0 0 4 0 0 5 0 6 2 9 0 8 0 0 0]                        
-;[0 0 0 0 0 0 8 0 0 0 5 0 0 0 9 3 0 0 7 0 0 0 0 0 6 0 0 0 0 3 0 4 0 0 9 0 0 0 7 6 0 0 0 0 0 0 0 0 0 3 0 5 0 4 7 0 0 0 0 0 9 0 0 0 0 1 0 7 4 0 0 5 0 6 2 0 0 8 0 0 0]
-;[0 0 0 0 0 0 8 0 9 0 5 0 0 0 9 3 0 0 7 0 0 0 0 0 6 0 0 0 0 3 0 4 0 0 9 0 0 0 0 6 0 0 0 0 0 0 0 0 0 3 0 5 0 4 7 0 0 0 0 0 0 0 0 0 0 1 0 7 4 0 0 5 0 6 2 9 0 8 0 0 0]
 ;[0 0 0 4 0 7 0 0 0 0 0 5 0 8 0 2 0 0 0 0 9 0 0 0 0 0 6 2 0 0 0 0 0 0 9 0 0 0 6 0 0 0 0 0 0 8 0 7 4 0 0 0 1 0 0 0 3 0 4 0 0 6 5 0 6 8 0 0 0 0 7 2 0 0 0 0 5 0 0 0 0]
 ;[0 0 0 4 0 7 0 0 0 0 0 5 0 8 0 2 0 0 0 0 9 0 0 0 0 0 6 2 0 0 0 0 0 0 9 0 0 0 6 0 0 0 0 0 0 8 0 7 4 0 0 0 1 0 0 0 3 0 4 0 0 6 5 0 6 8 0 0 0 0 7 2 0 0 0 0 5 0 9 0 0]
-;[0 0 0 0 0 7 0 0 0 0 0 5 0 8 0 2 0 7 0 0 0 0 0 3 5 4 6 0 0 0 0 0 0 0 9 0 0 5 0 0 0 0 0 2 0 8 0 7 4 0 2 0 1 0 0 0 3 0 4 0 0 6 5 0 0 8 9 0 0 0 0 2 0 0 0 0 0 0 0 3 0]
-;[0 0 0 0 0 7 0 0 0 0 0 0 0 8 0 2 0 7 0 0 0 0 0 3 5 4 6 0 0 0 0 0 0 0 9 0 0 5 0 0 0 0 0 2 0 8 0 7 4 0 2 0 1 0 0 0 3 0 4 0 0 6 5 5 0 8 9 0 0 0 0 2 0 0 0 0 0 0 0 3 0]
-;[0 0 0 0 0 7 0 0 0 0 0 0 0 8 0 2 0 7 0 0 0 0 0 3 5 4 6 0 0 0 0 0 0 0 9 0 0 5 0 0 0 0 0 0 0 8 0 7 4 0 2 0 1 0 0 1 3 0 4 0 0 6 5 0 0 8 9 0 0 0 0 2 0 0 0 0 0 0 0 3 0]
-;[0 0 0 0 0 7 0 0 0 0 0 0 0 8 0 2 0 0 0 0 0 0 0 0 5 4 6 0 0 0 0 0 0 0 9 0 0 5 0 0 0 0 0 0 0 8 0 7 4 0 2 0 1 0 0 1 3 0 4 0 0 6 5 0 0 8 9 0 0 0 7 2 0 0 0 0 0 0 0 3 0]
-;[0 0 0 0 0 7 0 0 0 0 0 0 0 8 0 2 0 0 0 0 0 0 0 0 5 4 6 0 0 0 5 0 0 0 9 0 0 0 6 0 0 0 0 0 0 8 0 7 4 0 2 0 1 0 0 1 3 0 4 0 0 6 5 0 0 8 9 0 0 0 7 2 0 0 0 0 0 0 0 3 0]
-;[0 0 0 0 0 7 0 0 0 0 0 0 0 8 0 2 0 0 0 0 0 0 0 0 5 4 6 0 0 0 0 0 1 0 9 0 0 0 6 0 0 0 0 0 0 8 0 7 4 0 2 0 1 0 0 0 3 0 4 0 0 6 5 0 0 8 9 0 0 0 7 2 0 0 0 0 5 0 9 3 0]
 ;[0 0 0 0 0 7 0 0 0 0 0 0 0 8 0 2 0 0 0 0 0 0 0 0 5 4 6 0 0 0 0 0 0 0 9 0 0 0 6 0 0 0 0 0 0 8 0 7 4 0 2 0 1 0 0 0 3 0 4 0 0 6 5 0 0 8 9 0 0 0 7 2 0 0 0 0 5 0 0 3 0]
 ;[0 0 4 0 0 6 3 0 0 0 0 5 0 1 0 0 0 0 0 0 8 0 0 0 0 0 9 0 0 0 0 0 0 0 2 0 7 0 0 0 0 3 0 5 0 2 3 0 0 0 7 0 0 1 0 0 0 5 4 2 0 0 9 0 4 0 0 7 1 3 0 0 0 0 0 0 8 3 1 0 0]
 ;[0 0 4 0 0 6 3 0 0 0 0 5 0 1 0 0 0 0 0 0 8 0 0 0 0 0 9 0 0 0 0 0 0 0 2 0 7 0 0 0 0 3 0 5 0 2 3 0 0 0 7 0 0 1 0 0 0 5 4 0 0 0 9 0 4 0 0 7 1 3 0 0 0 0 0 0 8 3 1 0 0]

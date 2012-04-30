@@ -165,6 +165,21 @@
 (deftest mx-test2
   (let  [pbls (create-pbls 2 test-2dim-array2)
          mx (pbls-2-poss-mx 2 pbls)]
+    (println "oldpbls" (create-pbls-old test-2dim-array2))
+    (println "init-pbls" (create-initial-pbls test-2dim-array2))
+    (let [imx (ipbls-2-poss-mx 2 (create-initial-pbls test-2dim-array2))]
+	    (println "imx0" (imx 0))
+	    (println "imx1" (imx 1))
+	    (println "imx2" (imx 2))
+	    (println "imx3" (imx 3))
+	    (println "hidden-singles" (mx-hidden-singles imx)))
+    (println "newpbls" pbls)
+    (println "mx0" (mx 0))
+    (println "mx1" (mx 1))
+    (println "mx2" (mx 2))
+    (println "mx3" (mx 3))
+    (println "ipbls-find" (create-ipbls-find-hidden-singles test-2dim-array2))
+    
     (is ((mx 1) 14))
     (is ((mx 0) 15))
     (is ((mx 2) 4))
@@ -177,12 +192,36 @@
     (is ((mx 3) 13))
     ))
 
+
+(def arr119 [0 0 0 0 0 3 0 0 0 0 0 7 0 2 1 0 0 9 5 0 8 0 0 0 0 0 0 0 0 0 1 0 0 8 2 0 0 0 0 6 0 0 7 0 0 0 0 9 8 0 0 0 3 0 2 8 0 7 0 4 3 0 0 0 0 0 1 3 0 0 0 8 0 0 0 0 0 2 0 6 0])
+;(println (create-pbls arr119))
+;(println (transl-to-linear arr119))
+
+;(println (pbls-2-poss-mx 3 (create-pbls arr119)))
+
 (deftest hidden-singles-test
-  (is (= #{12 13 14 15} (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array4)))))
-  (is (= #{14 15} (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array2)))))
-  (is (= #{14 15} (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array3)))))
-  (is (= #{12 13 14 15} (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array)))))
+  (is (= [#{15} #{14} #{13} #{12}] (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls-old test-2dim-array4)))))
+  (is (= [#{15} #{14} #{} #{}] (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls-old test-2dim-array2)))))
+  (is (= [#{15} #{14} #{} #{}] (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls-old test-2dim-array3)))))
+  (is (= [#{15} #{14} #{13} #{12}] (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls-old test-2dim-array)))))
+  (is (= [#{} #{69} #{9} #{} #{} #{} #{} #{8 12 76} #{}] (mx-hidden-singles (pbls-2-poss-mx 3 (create-pbls-old arr119)))))
+  (is (= [#{15} #{14} #{13} #{12}] (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array4)))))
+  (is (= [#{15} #{14} #{} #{}] (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array2)))))
+  (is (= [#{15} #{14} #{} #{}] (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array3)))))
+  (is (= [#{15} #{14} #{13} #{12}] (mx-hidden-singles (pbls-2-poss-mx 2 (create-pbls test-2dim-array)))))
+  (is (= [#{} #{69} #{9} #{} #{} #{} #{} #{8 12 76} #{}] (mx-hidden-singles (pbls-2-poss-mx 3 (create-pbls arr119)))))
   )    
+
+(deftest trans-test
+  (is (= test-2dim-array4 (transl-from-linear (transl-to-linear test-2dim-array4))))
+  (is (= test-2dim-array2 (transl-from-linear (transl-to-linear test-2dim-array2))))
+  (is (= test-2dim-array3 (transl-from-linear (transl-to-linear test-2dim-array3))))
+  (is (= test-2dim-array (transl-from-linear (transl-to-linear test-2dim-array)))))
+
+(sudoku arr119)
+
+
+;(create-initial-pbls arr119)
     
     
 

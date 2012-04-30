@@ -228,7 +228,9 @@
 			    ;(println "first-sudoku" first-sudoku)
 			    ;(println "solution" solution "complexity" (eval-way (solution :ways)))
 			    (println improved)
-			    (println improvedsolution "complexity" (eval-way (solution :ways)))
+			    (println "linear" (transl-to-linear improved))
+			    (println improvedsolution "complexity" (eval-way (improvedsolution :ways)))
+       
 	      ))
 	    
 	  )
